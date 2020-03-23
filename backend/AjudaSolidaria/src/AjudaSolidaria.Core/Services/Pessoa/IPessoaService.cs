@@ -1,10 +1,13 @@
-﻿using System;
+﻿using AjudaSolidaria.Core.Services.Interfaces;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using Entity = AjudaSolidaria.Domain.Entity;
 
 namespace AjudaSolidaria.Core.Services.Pessoa
 {
-    class IPessoaService
+    public interface IPessoaService : IServiceBase<Entity.Pessoa>
     {
+        Entity.Pessoa GetPessoaByCpf(string cpf);
+        IEnumerable<Entity.Pessoa> GetPessoaByLocalidade(string uf, string cidade, string bairro);
     }
 }

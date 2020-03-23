@@ -1,4 +1,5 @@
-﻿using AjudaSolidaria.Domain.Entity;
+﻿using AjudaSolidaria.Core.Services.Pessoa;
+using AjudaSolidaria.Domain.Entity;
 using AjudaSolidaria.Domain.Request;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,9 @@ namespace AjudaSolidaria.Core.IoC
 
             IMapper mapper = config.CreateMapper();
 
-            services.AddSingleton(mapper); 
+            services.AddSingleton(mapper);
+
+            services.AddScoped<IPessoaService,PessoaService>();
         }
     }
 }

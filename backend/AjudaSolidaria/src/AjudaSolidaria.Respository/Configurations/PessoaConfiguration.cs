@@ -23,6 +23,9 @@ namespace AjudaSolidaria.Respository.Configurations
             builder.Property(b => b.Endereco).HasColumnType("text");
             builder.Property(b => b.Numero).HasColumnType("text");
             builder.Property(b => b.Coordenadas).HasColumnType("text");
+
+            builder.HasIndex(b => b.CPF).IsUnique();
+            builder.HasIndex(b => new { b.CPF, b.DataNascimento });
         }
     }
 }
