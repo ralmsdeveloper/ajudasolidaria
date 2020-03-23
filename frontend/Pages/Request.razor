@@ -1,0 +1,28 @@
+﻿@page "/solicitar"
+
+<EditForm Model="@_requestModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <p>
+        <label>
+            Solicitação:
+            <InputTextArea @bind-Value="_requestModel.Description" />
+        </label>
+    </p>   
+
+    <button type="submit">Solicitar</button>
+</EditForm>
+
+@code {
+    private RequestModel _requestModel = new RequestModel();
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("OnValidSubmit");
+    }
+
+    public class RequestModel
+    {
+        public string Description { get; set; }
+    }
+}

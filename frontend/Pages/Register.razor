@@ -1,0 +1,70 @@
+@page "/registrar"
+
+<EditForm Model="@_userModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+<p>
+        <label>
+            Nome Completo:
+            <InputText @bind-Value="_userModel.Name" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Data de Nascimento:
+            <InputDate @bind-Value="_userModel.Birth" />
+        </label>
+    </p>
+    <p>
+        <label>
+            CPF:
+            <InputText @bind-Value="_userModel.TaxDocument" />
+        </label>
+    </p>
+    <p>
+        <label>
+            CEP:
+            <InputText @bind-Value="_userModel.ZipCode" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Endereço:
+            <InputText @bind-Value="_userModel.Address" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Número:
+            <InputText @bind-Value="_userModel.AddressNumber" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Complemento:
+            <InputText @bind-Value="_userModel.AddressComplement" />
+        </label>
+    </p>
+
+    <button type="submit">Registrar</button>
+</EditForm>
+
+@code {
+    private UserModel _userModel = new UserModel();
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("OnValidSubmit");
+    }
+
+    public class UserModel
+    {
+        public string Name { get; set; }
+        public DateTime Birth { get; set; }
+        public string TaxDocument { get; set; }
+        public string ZipCode { get; set; }
+        public string Address { get; set; }
+        public string AddressNumber { get; set; }
+        public string AddressComplement { get; set; }
+    }
+}

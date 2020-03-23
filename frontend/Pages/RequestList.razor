@@ -1,0 +1,61 @@
+﻿@page "/ajudar"
+@using System.Threading.Tasks
+@inject HttpClient Http
+
+<h1>Ajudar</h1>
+
+<p>Solicitações próximas a sua região</p>
+
+@if (requests == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Idade</th>
+                <th>Solicitação</th>
+                <th>Telefone</th>
+                <th>Endereço</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var request in requests)
+            {
+                <tr>
+                    <td>@request.Name</td>
+                    <td>@request.Age</td>
+                    <td>@request.Description</td>
+                    <td>@request.PhoneNumber</td>
+                    <td>@request.Address</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    Request[] requests;
+
+    protected override async Task OnInitializedAsync()
+    {
+        requests = await Http.GetJsonAsync<Request[]>("sample-data/weather.json");
+    }
+
+    public class Request
+    {
+        public string Name { get; set; }   
+
+        public int Age { get; set; }
+
+        public string Description { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public string Address {get; set;}
+    }
+}
