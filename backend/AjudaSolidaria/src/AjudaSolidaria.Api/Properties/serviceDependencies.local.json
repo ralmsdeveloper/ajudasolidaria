@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "appInsights1": {
+      "resourceId": "/subscriptions/7b88fdd8-8a14-41f5-aabd-a0f6fb5028c2/resourcegroups/api/providers/Microsoft.Insights/components/AjudaSolidaria.Api",
+      "type": "appInsights.azure",
+      "connectionId": null
+    }
+  }
+}
