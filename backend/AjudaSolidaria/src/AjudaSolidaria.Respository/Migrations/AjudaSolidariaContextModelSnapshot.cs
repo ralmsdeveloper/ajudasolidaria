@@ -19,7 +19,40 @@ namespace AjudaSolidaria.Respository.Migrations
                 .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("AjudaSolidaria.Domain.Pessoa", b =>
+            modelBuilder.Entity("AjudaSolidaria.Domain.Entity.Cidade", b =>
+                {
+                    b.Property<short>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<long>("CodigoIBGE")
+                        .HasColumnName("codigo_ibge")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Nome")
+                        .HasColumnName("nome")
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("UF")
+                        .HasColumnName("uf")
+                        .HasColumnType("bpchar(2)");
+
+                    b.HasKey("Id")
+                        .HasName("pk_cidade");
+
+                    b.HasIndex("UF")
+                        .HasName("ix_cidade_uf");
+
+                    b.HasIndex("UF", "Nome")
+                        .HasName("ix_cidade_uf_nome");
+
+                    b.ToTable("cidade");
+                });
+
+            modelBuilder.Entity("AjudaSolidaria.Domain.Entity.Pessoa", b =>
                 {
                     b.Property<Guid>("Key")
                         .ValueGeneratedOnAdd()
@@ -89,6 +122,13 @@ namespace AjudaSolidaria.Respository.Migrations
 
                     b.HasKey("Key")
                         .HasName("pk_pessoa");
+
+                    b.HasIndex("CPF")
+                        .IsUnique()
+                        .HasName("ix_pessoa_cpf");
+
+                    b.HasIndex("CPF", "DataNascimento")
+                        .HasName("ix_pessoa_cpf_data_nascimento");
 
                     b.ToTable("pessoa");
                 });

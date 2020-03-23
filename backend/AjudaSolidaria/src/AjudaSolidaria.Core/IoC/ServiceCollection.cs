@@ -1,4 +1,5 @@
-﻿using AjudaSolidaria.Core.Services.Pessoa;
+﻿using AjudaSolidaria.Core.Services.Estado;
+using AjudaSolidaria.Core.Services.Pessoa;
 using AjudaSolidaria.Domain.Entity;
 using AjudaSolidaria.Domain.Request;
 using AutoMapper;
@@ -20,6 +21,7 @@ namespace AjudaSolidaria.Core.IoC
             services.AddSingleton(mapper);
 
             services.AddScoped<IPessoaService,PessoaService>();
+            services.AddScoped<ICidadeService, CidadeService>();
         }
     }
 }

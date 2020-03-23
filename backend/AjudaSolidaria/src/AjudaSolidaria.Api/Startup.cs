@@ -21,6 +21,7 @@ namespace AjudaSolidaria.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMemoryCache();
             services.AddServicesRepository(Configuration);
             services.AddServiceSwaggerCustom();
             services.AddServicesCore();
