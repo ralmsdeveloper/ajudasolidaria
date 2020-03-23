@@ -22,6 +22,7 @@ namespace AjudaSolidaria.Api
         {
             services.AddControllers();
             services.AddMemoryCache();
+            services.AddHttpClient();
             services.AddServicesRepository(Configuration);
             services.AddServiceSwaggerCustom();
             services.AddServicesCore();
