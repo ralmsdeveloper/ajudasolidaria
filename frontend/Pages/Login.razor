@@ -1,0 +1,41 @@
+@page "/login"
+@using System.Threading.Tasks
+@inject HttpClient Http 
+
+@* <div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <div class="editor">
+                @if (false)
+                {
+                    <div class="alert alert-danger">
+                        Login attempt failed.
+                    </div>
+                }
+                <input type="text" @bind=@LoginDetails.Username placeholder="Username" class="form-control" />
+                <input type="password" @bind=@LoginDetails.Password placeholder="Username" class="form-control" />
+                <button class="btn btn-primary" @onclick="@Login">Login</button>
+            </div>
+        </div>
+    </div>
+</div> *@
+
+@code {
+    WeatherForecast[] forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await Http.GetJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+    }
+
+    public class WeatherForecast
+    {
+        public DateTime Date { get; set; }
+
+        public int TemperatureC { get; set; }
+
+        public string Summary { get; set; }
+
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+}

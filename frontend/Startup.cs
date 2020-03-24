@@ -12,7 +12,6 @@ namespace AjudaSolidaria
             services.AddAuthorizationCore();
             services.AddScoped<AuthenticationStateProviders.TokenAuthenticationStateProvider>();
             services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<AuthenticationStateProviders.TokenAuthenticationStateProvider>());
-            
         }
 
         public void Configure(IComponentsApplicationBuilder app)

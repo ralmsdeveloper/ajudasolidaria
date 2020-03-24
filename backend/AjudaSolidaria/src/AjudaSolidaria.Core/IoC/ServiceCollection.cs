@@ -1,4 +1,7 @@
-﻿using AjudaSolidaria.Core.Services.Pessoa;
+﻿using AjudaSolidaria.Core.Services.Authentication;
+using AjudaSolidaria.Core.Services.Covid19;
+using AjudaSolidaria.Core.Services.Estado;
+using AjudaSolidaria.Core.Services.Pessoa;
 using AjudaSolidaria.Domain.Entity;
 using AjudaSolidaria.Domain.Request;
 using AutoMapper;
@@ -20,6 +23,9 @@ namespace AjudaSolidaria.Core.IoC
             services.AddSingleton(mapper);
 
             services.AddScoped<IPessoaService,PessoaService>();
+            services.AddScoped<ICidadeService, CidadeService>();
+            services.AddScoped<ICovid19Service, Covid19Service>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
     }
 }

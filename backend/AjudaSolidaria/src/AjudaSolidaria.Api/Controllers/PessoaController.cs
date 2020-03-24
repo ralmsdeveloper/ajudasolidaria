@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using AjudaSolidaria.Core.Services.Pessoa;
 using AjudaSolidaria.Domain.Entity;
 using AjudaSolidaria.Domain.Request;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace AjudaSolidaria.Api.Controllers
