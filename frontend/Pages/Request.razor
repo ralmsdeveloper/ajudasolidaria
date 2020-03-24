@@ -1,12 +1,17 @@
 ﻿@page "/solicitar"
+@using System.Threading.Tasks
+@inject HttpClient Http
+@inject AuthenticationStateProviders.TokenAuthenticationStateProvider TokenProvider
+@using System.ComponentModel.DataAnnotations;
+@attribute [Authorize]
 
-<EditForm Model="@_requestModel" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="@requestModel" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <p>
         <label>
             Solicitação:
-            <InputTextArea @bind-Value="_requestModel.Description" />
+            <InputTextArea @bind-Value="requestModel.Description" />
         </label>
     </p>   
 
@@ -14,11 +19,16 @@
 </EditForm>
 
 @code {
-    private RequestModel _requestModel = new RequestModel();
+    private RequestModel requestModel = new RequestModel();
 
-    private void HandleValidSubmit()
+    private async void HandleValidSubmit()
     {
-        Console.WriteLine("OnValidSubmit");
+        var token = await TokenProvider.GetTokenAsync();
+        if (token != null)
+        {
+            Http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            var result = await Http.PostJsonAsync<Request[]>("url", requestModel);
+        }
     }
 
     public class RequestModel

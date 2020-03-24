@@ -1,0 +1,52 @@
+@inject HttpClient Http
+@inject AuthenticationStateProviders.TokenAuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavigationManager
+
+<div class="container col-6">
+    @if (loginFailure)
+    {
+        <div class="alert alert-danger">Your credentials did not work. Please try again.</div>
+    }
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Login</h5>
+              <EditForm @ref="loginform" Model="credentials" OnValidSubmit="SubmitCredentials">
+                <DataAnnotationsValidator />
+
+                <div class="form-group">
+                    <label>CPF</label>
+                    <InputText class="form-control" @bind-Value="credentials.login" />
+                    <ValidationMessage For="@(()=> credentials.login)" />
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <InputText type="password" class="form-control" @bind-Value="credentials.password" />
+                    <ValidationMessage For="@(()=> credentials.password)" />
+                </div>
+                <button type="submit" class="btn btn-outline-primary btn-sm">Entrar</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" @onclick="Registro">Registro</button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+@code {
+    Credentials credentials = new Credentials();
+    bool loginFailure;
+
+    EditForm loginform { get; set; }
+
+    async Task SubmitCredentials()
+    {
+        var result = await Http.PostJsonAsync<LoginResult>("https://ajudasolidariaapi.azurewebsites.net/v1/authentication", credentials);
+        loginFailure = result.token == null;
+        if (!loginFailure)
+        {
+            await AuthStateProvider.SetTokenAsync(result.token, result.expiry);
+        }
+    }
+
+    void Registro()
+    {
+        NavigationManager.NavigateTo("/registrar");
+    }
+}
