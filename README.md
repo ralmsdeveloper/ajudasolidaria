@@ -14,10 +14,12 @@ Tanto por um aplicativo quanto por uma página web, você pode solicitar ajuda o
 
 ## Como funciona
 
-Quem precisa de ajuda:
+**Quem precisa de ajuda:**
+
 É simples, aqueles que precisam de ajuda, vai clicar em uma opção (**Preciso de Ajuda**), preencher seus dados e solicitar
 
-Quem vai ser voluntário:
+**Quem vai ser voluntário:**
+
 É simples, aqueles que querem ajudar, vai clicar em uma opção (**Quero ajudar**), preencher seus dados, escolher uma solicitação mais próxima e ajudar a pessoa que está precisando.
 
 ## Projeto
