@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace AjudaSolidaria.Api.IoC
 {
-    public static class CustomServices
+    public static class ServiceCollection
     {
         public static void AddServiceSwaggerCustom(this IServiceCollection services)
         {
@@ -44,6 +48,28 @@ namespace AjudaSolidaria.Api.IoC
                 option.SwaggerEndpoint(
                     "v1/swagger.json",
                     "Ajuda Solidaria v1");
+            });
+        }
+
+        public static void AddAuthenticationJwt(this IServiceCollection services, IConfiguration configuration)
+        {
+            var secretKey = Encoding.ASCII.GetBytes(configuration["SecretKey"]);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
             });
         }
     }
