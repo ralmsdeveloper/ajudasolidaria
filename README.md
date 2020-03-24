@@ -32,3 +32,6 @@ O projeto é sem fins lucrativos, nosso maior objetivo é ajudar realmente aquel
 
 ## Mensagem
 As dificuldades perdem o sentido quando fazemos o bem!
+
+## Site
+www.ajudasolidaria.com.br
