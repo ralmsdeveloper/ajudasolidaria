@@ -22,7 +22,7 @@ namespace AjudaSolidaria.Core.Services.Authentication
             _configuration = configuration;
         }
 
-        public async ValueTask<string> GenerateToken()
+        public async ValueTask<object> GenerateToken()
         {
             if(_pessoa == null)
             {
@@ -31,6 +31,7 @@ namespace AjudaSolidaria.Core.Services.Authentication
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var secretKey = Encoding.ASCII.GetBytes(_configuration["SecretKey"]);
+            var expires = DateTime.UtcNow.AddHours(3);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -40,7 +41,7 @@ namespace AjudaSolidaria.Core.Services.Authentication
                     new Claim("Estado", _pessoa.Estado ?? string.Empty),
                     new Claim("Cidade", _pessoa.Cidade ?? string.Empty),
                 }),
-                Expires = DateTime.UtcNow.AddHours(3),
+                Expires = expires,
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(secretKey), 
                     SecurityAlgorithms.HmacSha256Signature)
@@ -49,7 +50,11 @@ namespace AjudaSolidaria.Core.Services.Authentication
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);
             var token = tokenHandler.WriteToken(securityToken);
 
-            return await Task.FromResult(token);
+            return await Task.FromResult(new
+            {
+                token,
+                expires
+            });
         }
 
         public async ValueTask<bool> SignInAsync(string login, string password)

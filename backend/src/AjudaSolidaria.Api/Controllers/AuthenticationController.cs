@@ -44,7 +44,7 @@ namespace AjudaSolidaria.Api.Controllers
 
                 var token = await _authenticationService.GenerateToken(); 
 
-                return Ok(new { token });
+                return Ok(token);
 
             }
             catch (Exception e)

@@ -40,11 +40,9 @@ namespace AjudaSolidaria.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
             app.UseApplicationSwaggerCustom();
             app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
 
             app.UseCors(policy => policy
                 .SetIsOriginAllowed(x => _ = true)
@@ -53,6 +51,9 @@ namespace AjudaSolidaria.Api
                 .AllowCredentials()
                 .WithExposedHeaders("Content-Disposition")
                 .Build());
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.Use(async (context, next) =>
             {
