@@ -46,6 +46,13 @@ namespace AjudaSolidaria.Api
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseCors(policy => policy
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .WithExposedHeaders("Content-Disposition"));
+
             app.Use(async (context, next) =>
             {
                 var timer = System.Diagnostics.Stopwatch.StartNew();

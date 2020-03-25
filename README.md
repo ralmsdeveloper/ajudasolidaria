@@ -1,4 +1,4 @@
-![Logo](https://github.com/ralmsdeveloper/ajudasolidaria/blob/master/assets/logo.png)
+![Logo](https://github.com/ralmsdeveloper/ajudasolidaria/blob/master/assets/arte_app.png)
 
 # Ajuda Solidaria
 Projeto com objetivo de ajudar aqueles que não podem sair de suas casas.
