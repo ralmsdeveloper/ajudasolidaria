@@ -1,70 +1,126 @@
 @page "/registrar"
+@inject HttpClient Http
+@using System.ComponentModel.DataAnnotations;
 
-<EditForm Model="@_userModel" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-<p>
-        <label>
-            Nome Completo:
-            <InputText @bind-Value="_userModel.Name" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Data de Nascimento:
-            <InputDate @bind-Value="_userModel.Birth" />
-        </label>
-    </p>
-    <p>
-        <label>
-            CPF:
-            <InputText @bind-Value="_userModel.TaxDocument" />
-        </label>
-    </p>
-    <p>
-        <label>
-            CEP:
-            <InputText @bind-Value="_userModel.ZipCode" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Endereço:
-            <InputText @bind-Value="_userModel.Address" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Número:
-            <InputText @bind-Value="_userModel.AddressNumber" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Complemento:
-            <InputText @bind-Value="_userModel.AddressComplement" />
-        </label>
-    </p>
+<h3>Registro</h3>
+<br/>
+<br/>
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="@userModel" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label class="control-label">Nome Completo:</label>
+                <InputText @bind-Value="userModel.nome" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Data de Nascimento:</label>
+                <InputDate @bind-Value="userModel.dataNascimento" class="form-control"/>        
+            </div>
+            <div class="form-group">
+                <label class="control-label">CPF:</label>
+                <InputText @bind-Value="userModel.cpf" class="form-control" data-mask="000.000.000-00"/>
+                
+            </div>
+            <div class="form-group">
+                <label class="control-label">Telefone:</label>
+                <InputText @bind-Value="userModel.telefone" class="form-control" data-mask="(00) 00000-0000"/>
+                
+            </div>
+            <div class="form-group">
+                <label class="control-label">CEP:</label>
+                 <InputText @bind-Value="userModel.cep" class="form-control"/>
+                
+            </div>
+            <div class="form-group">
+                <label class="control-label">Endereço:</label>
+                <InputText @bind-Value="userModel.endereco" class="form-control"/>
+                
+            </div>
+            <div class="form-group">
+                <label class="control-label">Número:</label>
+                <InputText @bind-Value="userModel.numero" class="form-control"/>
+                
+            </div>
+            <div class="form-group">
+                <label class="control-label">Bairro:</label>
+                <InputText @bind-Value="userModel.bairro" class="form-control"/>
+                
+            </div>
+            <div class="form-group">
+                <label class="control-label">Cidade:</label>
+                <InputText @bind-Value="userModel.cidade" class="form-control"/>
+                
+            </div>
+            <div class="form-group">
+                <label class="control-label">Estado:</label>
+                <InputText @bind-Value="userModel.estado" class="form-control"/>
+                
+            </div>
 
-    <button type="submit">Registrar</button>
-</EditForm>
+            <button class="btn btn-outline-primary btn-sm" type="submit">Registrar</button>
+        </EditForm>
+    </div>
+</div>
 
 @code {
-    private UserModel _userModel = new UserModel();
+    private UserModel userModel = new UserModel()
+    {
+        dataNascimento = DateTime.Now
+    };
 
     private void HandleValidSubmit()
     {
-        Console.WriteLine("OnValidSubmit");
+        userModel.status = true;
+
+        var result = Http.PostJsonAsync("https://ajudasolidariaapi.azurewebsites.net/v1/pessoa", userModel);
+        Console.WriteLine(result);
     }
 
     public class UserModel
     {
-        public string Name { get; set; }
-        public DateTime Birth { get; set; }
-        public string TaxDocument { get; set; }
-        public string ZipCode { get; set; }
-        public string Address { get; set; }
-        public string AddressNumber { get; set; }
-        public string AddressComplement { get; set; }
+        [Required(ErrorMessage =
+            "Nome é Obrigatório")]
+        [Display(Name = "Nome")]
+        public string nome { get; set; }
+        [Required(ErrorMessage =
+            "Data de Nascimento é Obrigatório")]
+        [Display(Name = "Data de Nascimento")]
+        public DateTime dataNascimento { get; set; }
+        [Required(ErrorMessage =
+            "CPF é Obrigatório")]
+        [Display(Name = "CPF")]
+        public string cpf { get; set; }
+        [Required(ErrorMessage =
+            "Número do Telefone é Obrigatório")]
+        [Display(Name = "Telefone")]
+        public string telefone { get; set; }
+        [Required(ErrorMessage =
+            "CEP é Obrigatório")]
+        [Display(Name = "CEP")]
+        public string cep { get; set; }
+        [Required(ErrorMessage =
+            "Endereço é Obrigatório")]
+        [Display(Name = "Endereço")]
+        public string endereco { get; set; }
+        [Required(ErrorMessage =
+            "Número da Residência é Obrigatório")]
+        [Display(Name = "Número")]
+        public string numero { get; set; }
+        [Required(ErrorMessage =
+            "Cidade é Obrigatório")]
+        [Display(Name = "Cidade")]
+        public string cidade { get; set; }
+        [Required(ErrorMessage =
+            "Bairro é Obrigatório")]
+        [Display(Name = "Bairro")]
+        public string bairro { get; set; }
+        [Required(ErrorMessage =
+            "Estado é Obrigatório")]
+        [Display(Name = "Estado")]
+        public string estado { get; set; }
+        public string coordenadas { get; set; }
+        public bool status { get; set; }
     }
 }

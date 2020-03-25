@@ -1,11 +1,15 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
+@inject AuthenticationStateProviders.TokenAuthenticationStateProvider TokenProvider
 
 <div class="sidebar">
     <NavMenu />
 </div>
 
 <div class="main">
-    <div class="top-row px-4">        
+    <div class="top-row px-4">
+       <AuthorizeView>Logged in as @context.User.Identity.Name 
+            <button class="btn btn-sm btn-outline-dark" @onclick="@(() => TokenProvider.SetTokenAsync(null))">Logout</button>
+        </AuthorizeView>
     </div>
 
     <div class="content px-4">
