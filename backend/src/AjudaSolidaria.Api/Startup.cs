@@ -30,6 +30,7 @@ namespace AjudaSolidaria.Api
             services.AddServicesCore();
             services.AddApplicationInsightsTelemetry();
             services.AddAuthenticationJwt(Configuration);
+            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -39,7 +40,6 @@ namespace AjudaSolidaria.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
             app.UseApplicationSwaggerCustom();
             app.UseRouting();
 
@@ -47,11 +47,12 @@ namespace AjudaSolidaria.Api
             app.UseAuthorization();
 
             app.UseCors(policy => policy
-                .AllowAnyOrigin()
+                .SetIsOriginAllowed(x => _ = true)
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()
-                .WithExposedHeaders("Content-Disposition"));
+                .WithExposedHeaders("Content-Disposition")
+                .Build());
 
             app.Use(async (context, next) =>
             {
