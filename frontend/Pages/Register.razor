@@ -1,8 +1,9 @@
 @page "/registrar"
 @inject HttpClient Http
-@using System.ComponentModel.DataAnnotations;
+@inject NavigationManager NavigationManager
+@using System.ComponentModel.DataAnnotations
 
-<h3>Registro</h3>
+<h3>Cadastrar-se</h3>
 <br/>
 <br/>
 <div class="row">
@@ -60,6 +61,7 @@
             </div>
 
             <button class="btn btn-outline-primary btn-sm" type="submit">Registrar</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" @onclick="Voltar">Voltar</button>
         </EditForm>
     </div>
 </div>
@@ -70,12 +72,18 @@
         dataNascimento = DateTime.Now
     };
 
-    private void HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
         userModel.status = true;
 
-        var result = Http.PostJsonAsync("https://ajudasolidariaapi.azurewebsites.net/v1/pessoa", userModel);
-        Console.WriteLine(result);
+        await Http.PostJsonAsync("https://ajudasolidariaapi.azurewebsites.net/v1/pessoa", userModel);
+
+        NavigationManager.NavigateTo("/");
+    }
+
+        void Voltar()
+    {
+        NavigationManager.NavigateTo("/");
     }
 
     public class UserModel

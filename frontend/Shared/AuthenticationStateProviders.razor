@@ -17,7 +17,7 @@ public class TokenAuthenticationStateProvider : AuthenticationStateProvider
             _jsRuntime = jsRuntime;
         }
         
-        public async Task SetTokenAsync(string token, DateTime expiry = default)
+        public async Task SetTokenAsync(string token, DateTime expires = default)
         {
             if (token == null)
             {
@@ -27,7 +27,7 @@ public class TokenAuthenticationStateProvider : AuthenticationStateProvider
             else
             {
                 await _jsRuntime.InvokeAsync<object>("localStorage.setItem", "authToken", token);
-                await _jsRuntime.InvokeAsync<object>("localStorage.setItem", "authTokenExpiry", expiry);
+                await _jsRuntime.InvokeAsync<object>("localStorage.setItem", "authTokenExpiry", expires);
             }
 
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());

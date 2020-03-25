@@ -45,6 +45,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         var token = await TokenProvider.GetTokenAsync();
+
         if (token != null)
         {
             Http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
