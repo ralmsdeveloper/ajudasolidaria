@@ -95,7 +95,7 @@
     private async Task ChangedValue(ChangeEventArgs e)
     {
         userModel.estado = e.Value.ToString();
-        userModel.cidade = null;
+        userModel.cidade = "-1";
         cities = await Http.GetJsonAsync<City[]>("https://ajudasolidariaapi.azurewebsites.net/v1/estado/" + userModel.estado + "/cidades");
     }
 
