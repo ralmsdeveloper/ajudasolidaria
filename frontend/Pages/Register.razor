@@ -21,45 +21,56 @@
             </div>
             <div class="form-group">
                 <label class="control-label">CPF:</label>
-                <InputText @bind-Value="userModel.cpf" class="form-control" data-mask="000.000.000-00"/>
-                
+                <InputText @bind-Value="userModel.cpf" class="form-control" />                
             </div>
             <div class="form-group">
                 <label class="control-label">Telefone:</label>
-                <InputText @bind-Value="userModel.telefone" class="form-control" data-mask="(00) 00000-0000"/>
-                
+                <InputText @bind-Value="userModel.telefone" class="form-control" />                
             </div>
             <div class="form-group">
                 <label class="control-label">CEP:</label>
-                 <InputText @bind-Value="userModel.cep" class="form-control"/>
-                
+                 <InputText @bind-Value="userModel.cep" class="form-control"/>                
             </div>
             <div class="form-group">
                 <label class="control-label">Endereço:</label>
-                <InputText @bind-Value="userModel.endereco" class="form-control"/>
-                
+                <InputText @bind-Value="userModel.endereco" class="form-control"/>                
             </div>
             <div class="form-group">
                 <label class="control-label">Número:</label>
-                <InputText @bind-Value="userModel.numero" class="form-control"/>
-                
+                <InputText @bind-Value="userModel.numero" class="form-control"/>                
             </div>
             <div class="form-group">
                 <label class="control-label">Bairro:</label>
-                <InputText @bind-Value="userModel.bairro" class="form-control"/>
-                
+                <InputText @bind-Value="userModel.bairro" class="form-control"/>                
             </div>
+            @if (states.Length > 0 )
+            {
+                <div class="form-group">
+                    <label class="control-label">Estado:</label>
+                    <select id="SearchStateId" class="form-control" @onchange="ChangedValue">
+                        <option selected disabled value="-1"> Selecione um Estado</option>
+                        @foreach (var state in states)
+                        {
+                            <option value="@state">@state</option>
+                        }
+                    </select>
+                </div>
+            }
+
             <div class="form-group">
                 <label class="control-label">Cidade:</label>
-                <InputText @bind-Value="userModel.cidade" class="form-control"/>
-                
-            </div>
-            <div class="form-group">
-                <label class="control-label">Estado:</label>
-                <InputText @bind-Value="userModel.estado" class="form-control"/>
-                
-            </div>
-
+                <InputSelect @bind-Value="userModel.cidade" class="form-control" >
+                    <option selected disabled value="-1"> Selecione uma Cidade</option>
+                    @if (cities.Length > 0 )
+                    {
+                        @foreach (var city in cities)
+                        {
+                            <option value="@city.cidade">@city.cidade</option>
+                        }
+                    }
+                </InputSelect>
+            </div>            
+            
             <button class="btn btn-outline-primary btn-sm" type="submit">Registrar</button>
             <button type="button" class="btn btn-outline-primary btn-sm" @onclick="Voltar">Voltar</button>
         </EditForm>
@@ -67,10 +78,26 @@
 </div>
 
 @code {
+    private string[] states;
+    private City[] cities;
     private UserModel userModel = new UserModel()
     {
         dataNascimento = DateTime.Now
     };
+
+    protected override async Task OnInitializedAsync()
+    {
+        states = new string[26];
+        cities = new City[0];
+        states = await Http.GetJsonAsync<string[]>("https://ajudasolidariaapi.azurewebsites.net/v1/estado");
+    }
+
+    private async Task ChangedValue(ChangeEventArgs e)
+    {
+        userModel.estado = e.Value.ToString();
+        userModel.cidade = null;
+        cities = await Http.GetJsonAsync<City[]>("https://ajudasolidariaapi.azurewebsites.net/v1/estado/" + userModel.estado + "/cidades");
+    }
 
     private async Task HandleValidSubmit()
     {
@@ -81,9 +108,15 @@
         NavigationManager.NavigateTo("/");
     }
 
-        void Voltar()
+    void Voltar()
     {
         NavigationManager.NavigateTo("/");
+    }
+
+    public class City
+    {
+        public string cidade { get; set; }
+        public string siglaUF { get; set; }
     }
 
     public class UserModel
