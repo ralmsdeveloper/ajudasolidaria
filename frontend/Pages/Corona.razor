@@ -1,0 +1,64 @@
+@page "/corona"
+@using System.Threading.Tasks
+@inject HttpClient Http
+
+<h1>Corona</h1>
+
+<p>Situação do Corona Vírus (COVID-19) No Brasil</p>
+
+@if (requests == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Estado</th>
+                <th>Total de Casos</th>
+                <th>Total Confirmados</th>
+                <th>Total Não Confirmados</th>
+                <th>Total de Mortes</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var request in requests)
+            {
+                <tr>
+                    <td>@request.estado</td>
+                    <td>@request.total</td>
+                    <td>@request.totalConfirmados</td>
+                    <td>@request.totalNaoConfirmados</td>
+                    <td>@request.totalMortes</td> 
+                    <td>
+                        @if(request.estado != "TOTAL")
+                        {
+                            <a href="url">Detalhes</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    CasoCorona[] requests;
+    protected override async Task OnInitializedAsync()
+    {
+            requests = await Http.GetJsonAsync<CasoCorona[]>("https://ajudasolidariaapi.azurewebsites.net/v1/covid19");
+
+    }
+
+    public class CasoCorona
+    {
+        public string pais { get; set; }
+        public string estado { get; set; }
+        public string total { get; set; }
+        public string totalConfirmados { get; set; }
+        public string totalNaoConfirmados { get; set; }
+        public string totalMortes { get; set; }
+    }
+}

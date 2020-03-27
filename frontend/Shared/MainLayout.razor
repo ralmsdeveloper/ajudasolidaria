@@ -6,8 +6,11 @@
 </div>
 
 <div class="main">
-    <div class="top-row px-4">
-       <AuthorizeView>Logged in as @context.User.Identity.Name 
+    <div class="top-row px-4 d-flex justify-content-between">
+        <NavLink class="btn btn-sm btn-outline-dark" href="corona">
+                Corona Status
+        </NavLink>
+       <AuthorizeView>
             <button class="btn btn-sm btn-outline-dark" @onclick="@(() => TokenProvider.SetTokenAsync(null))">Logout</button>
         </AuthorizeView>
     </div>

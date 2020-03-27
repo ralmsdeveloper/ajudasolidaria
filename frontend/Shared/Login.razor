@@ -38,10 +38,11 @@
     async Task SubmitCredentials()
     {
         var result = await Http.PostJsonAsync<LoginResult>("https://ajudasolidariaapi.azurewebsites.net/v1/authentication", credentials);
+        
         loginFailure = result.token == null;
         if (!loginFailure)
         {
-            await AuthStateProvider.SetTokenAsync(result.token, result.expiry);
+            await AuthStateProvider.SetTokenAsync(result.token, result.expires);
         }
     }
 
