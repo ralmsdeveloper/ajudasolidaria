@@ -7,7 +7,7 @@
     {
         <div class="alert alert-danger">Your credentials did not work. Please try again.</div>
     }
-    <div class="card">
+    <div class="card border">
         <div class="card-body">
             <h5 class="card-title">Login</h5>
               <EditForm @ref="loginform" Model="credentials" OnValidSubmit="SubmitCredentials">
@@ -23,8 +23,8 @@
                     <InputText type="password" class="form-control" @bind-Value="credentials.password" />
                     <ValidationMessage For="@(()=> credentials.password)" />
                 </div>
-                <button type="submit" class="btn btn-outline-primary btn-sm">Entrar</button>
-                <button type="button" class="btn btn-outline-primary btn-sm" @onclick="Registro">Registro</button>
+                <button type="submit" class="btn btn-outline-success btn-sm">Entrar</button>
+                <button type="button" class="btn btn-outline-success btn-sm" @onclick="Registro">Registro</button>
             </EditForm>
         </div>
     </div>

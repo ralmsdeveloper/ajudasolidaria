@@ -26,7 +26,7 @@ app {
     }
 
 .sidebar {
-    background-image: linear-gradient(180deg, #296938 0%, #00fff3 70%);
+    background-image: linear-gradient(180deg, #00AF80 0%, rgb(2, 194, 143) 70%);
 }
 
     .sidebar .top-row {
