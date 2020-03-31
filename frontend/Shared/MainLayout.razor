@@ -6,10 +6,7 @@
 </div>
 
 <div class="main">
-    <div class="top-row px-4 d-flex justify-content-between">
-        <NavLink class="btn btn-sm btn-outline-dark" href="corona">
-                Corona Status
-        </NavLink>
+    <div class="top-row px-4 d-flex justify-content-end">
        <AuthorizeView>
             <button class="btn btn-sm btn-outline-dark" @onclick="@(() => TokenProvider.SetTokenAsync(null))">Logout</button>
         </AuthorizeView>
