@@ -2,57 +2,96 @@
 @using System.Threading.Tasks
 @inject HttpClient Http
 
-<h1>Corona</h1>
-
-<p>Situação do Corona Vírus (COVID-19) No Brasil</p>
-
-@if (requests == null)
+    <h1 class="card-title">Corona Vírus (COVID-19)</h1>
+    <br/>
+@if (states != null)
 {
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Estado</th>
-                <th>Total de Casos</th>
-                <th>Total Confirmados</th>
-                <th>Total Não Confirmados</th>
-                <th>Total de Mortes</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var request in requests)
-            {
-                <tr>
-                    <td>@request.estado</td>
-                    <td>@request.total</td>
-                    <td>@request.totalConfirmados</td>
-                    <td>@request.totalNaoConfirmados</td>
-                    <td>@request.totalMortes</td> 
-                    <td>
-                        @if(request.estado != "TOTAL")
-                        {
-                            <a href="url">Detalhes</a>
-                        }
-                    </td>
-                </tr>
+    <select id="SearchStateId" class="form-control" @onchange="ChangedStateValue" style="color: #fff;background-color: #545b62;border-color: #4e555b;width: 300px">
+        <option selected disabled value="-1"> Selecione um Estado</option>
+            @foreach (var state in states)
+            {                    
+                @if(@state.estado != "TOTAL") {
+                    <option value="@state.estado">@state.estado</option>
+                }
             }
-        </tbody>
-    </table>
+    </select>
+    <br/>
+    <div class="card" style="width: 20rem;">
+        <div class="card-header">
+            @if(@selectedState.estado != "TOTAL") {
+                <h5>Em @selectedState.estado</h5>
+            }
+            else 
+            {
+                <h5>No Brasil</h5>
+            }            
+        </div>
+        <div class="card-body">
+                <p class="card-text">Total de Casos: @selectedState.total</p>
+                <p class="card-text">Total Confirmados: @selectedState.totalConfirmados</p>
+                <p class="card-text">Total Não Confirmados: @selectedState.totalNaoConfirmados</p>
+                <p class="card-text">Total de Mortos: @selectedState.totalMortes</p>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    @if (canSeeCities)
+    {
+        <select id="SearchCityId" class="form-control" @onchange="ChangedCityValue" style="color: #fff;background-color: #545b62;border-color: #4e555b;width: 300px">
+            <option selected disabled value="-1"> Selecione uma Cidade</option>
+                @if (cities != null)
+                {
+                    @foreach (var city in cities)
+                    { 
+                        <option value="@city.cidade">@city.cidade</option>
+                    }
+                }
+
+        </select>
+        <br/>
+        @if (selectedCity != null)
+        {
+            <div class="card" style="width: 20rem;">
+                <div class="card-header">
+                    <h5>Em @selectedCity.cidade</h5>           
+                </div>
+                <div class="card-body">
+                        <p class="card-text">Total de Casos: @selectedCity.total</p>
+                </div>
+            </div>
+        }
+    }
 }
 
 @code {
-    CasoCorona[] requests;
+    StateCasoCorona[] states;
+    CityCasoCorona[] cities = null;
+    StateCasoCorona selectedState;
+    CityCasoCorona selectedCity = null;
+    bool canSeeCities;
     protected override async Task OnInitializedAsync()
     {
-            requests = await Http.GetJsonAsync<CasoCorona[]>("https://ajudasolidariaapi.azurewebsites.net/v1/covid19");
-
+        states = await Http.GetJsonAsync<StateCasoCorona[]>("https://ajudasolidariaapi.azurewebsites.net/v1/covid19");
+        selectedState = states.FirstOrDefault();
+        states = states.OrderBy(x => x.estado).ToArray();
     }
 
-    public class CasoCorona
+    private async Task ChangedStateValue(ChangeEventArgs e)
+    {
+        canSeeCities = false;
+        selectedState = states.First(x => x.estado == e.Value.ToString());
+        cities = await Http.GetJsonAsync<CityCasoCorona[]>("https://ajudasolidariaapi.azurewebsites.net/v1/covid19/state/" + e.Value.ToString() + "/cities");
+        cities = cities.OrderBy(x => x.cidade).ToArray();
+        selectedCity = null;
+        canSeeCities = true;
+    }
+
+    private void ChangedCityValue(ChangeEventArgs e)
+    {
+        selectedCity = cities.First(x => x.cidade == e.Value.ToString());
+    }
+
+    public class StateCasoCorona
     {
         public string pais { get; set; }
         public string estado { get; set; }
@@ -60,5 +99,14 @@ else
         public string totalConfirmados { get; set; }
         public string totalNaoConfirmados { get; set; }
         public string totalMortes { get; set; }
+    }
+
+    public class CityCasoCorona
+    {
+        public string pais { get; set; }
+        public string estado { get; set; }
+        public string cidade { get; set; }
+        public string codigoIBGE { get; set; }
+        public string total { get; set; }
     }
 }
