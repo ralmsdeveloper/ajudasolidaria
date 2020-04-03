@@ -1,66 +1,99 @@
 @page "/corona"
 @using System.Threading.Tasks
-@inject HttpClient Http
+@inject HttpClient Http   
 
-    <h1 class="card-title">Corona Vírus (COVID-19)</h1>
-    <br/>
+<div class="container" style="padding-left: 0px !important; margin-left: 0px !important">  
+  <div class="row">
+    <div class="col-lg-12">
+        <h1 class="card-title ">Corona Vírus (COVID-19)</h1> 
+    </div>
+    <div class="col-lg-6">
+
+    </div>
+     <div class="col-lg-6">
+
+    </div>
+     <div class="col-lg-6">
+
+    </div>
+  </div>
+</div>
+
 @if (states != null)
 {
-    <select id="SearchStateId" class="form-control" @onchange="ChangedStateValue" style="color: #fff;background-color: #545b62;border-color: #4e555b;width: 300px">
-        <option selected disabled value="-1"> Selecione um Estado</option>
-            @foreach (var state in states)
-            {                    
-                @if(@state.estado != "TOTAL") {
-                    <option value="@state.estado">@state.estado</option>
-                }
-            }
-    </select>
-    <br/>
-    <div class="card" style="width: 20rem;">
-        <div class="card-header">
-            @if(@selectedState.estado != "TOTAL") {
-                <h5>Em @selectedState.estado</h5>
-            }
-            else 
-            {
-                <h5>No Brasil</h5>
-            }            
-        </div>
-        <div class="card-body">
-                <p class="card-text">Total de Casos: @selectedState.total</p>
-                <p class="card-text">Total Confirmados: @selectedState.totalConfirmados</p>
-                <p class="card-text">Total Não Confirmados: @selectedState.totalNaoConfirmados</p>
-                <p class="card-text">Total de Mortos: @selectedState.totalMortes</p>
-        </div>
-    </div>
-    <br/>
-    <br/>
-    @if (canSeeCities)
-    {
-        <select id="SearchCityId" class="form-control" @onchange="ChangedCityValue" style="color: #fff;background-color: #545b62;border-color: #4e555b;width: 300px">
-            <option selected disabled value="-1"> Selecione uma Cidade</option>
-                @if (cities != null)
-                {
-                    @foreach (var city in cities)
-                    { 
-                        <option value="@city.cidade">@city.cidade</option>
+<div class="container text-left" style="padding-left: 0px !important; margin-left: 0px !important">
+    <div class="row">
+        <div class="col-lg-6">
+            <br/>
+            <select id="SearchStateId" class="form-control" @onchange="ChangedStateValue" style="color: #fff;background-color: #545b62;border-color: #4e555b;width: 300px">
+                <option selected disabled value="-1"> Selecione um Estado</option>
+                    @foreach (var state in states)
+                    {                    
+                        @if(@state.estado != "TOTAL") {
+                            <option value="@state.estado">@state.estado</option>
+                        }
                     }
-                }
-
-        </select>
-        <br/>
-        @if (selectedCity != null)
-        {
+            </select>
+            <br/>
             <div class="card" style="width: 20rem;">
                 <div class="card-header">
-                    <h5>Em @selectedCity.cidade</h5>           
+                    @if(@selectedState.estado != "TOTAL") {
+                        <h5>Em @selectedState.estado</h5>
+                    }
+                    else 
+                    {
+                        <h5>No Brasil</h5>
+                    }            
                 </div>
                 <div class="card-body">
-                        <p class="card-text">Total de Casos: @selectedCity.total</p>
+                        <p class="card-text">Total de Casos: @selectedState.total</p>
+                        <p class="card-text">Total Confirmados: @selectedState.totalConfirmados</p>
+                        <p class="card-text">Total Não Confirmados: @selectedState.totalNaoConfirmados</p>
+                        <p class="card-text">Total de Mortos: @selectedState.totalMortes</p>
                 </div>
             </div>
-        }
-    }
+        </div>
+        <div class="col-lg-6">
+            @if (canSeeCities)
+            {
+                <br/>
+                <select id="SearchCityId" class="form-control" @onchange="ChangedCityValue" style="color: #fff;background-color: #545b62;border-color: #4e555b;width: 300px">
+                    <option selected disabled value="-1"> Selecione uma Cidade</option>
+                        @if (cities != null)
+                        {
+                            @foreach (var city in cities)
+                            { 
+                                <option value="@city.cidade">@city.cidade</option>
+                            }
+                        }
+
+                </select>
+                <br/>
+                @if (selectedCity != null)
+                {
+                    <div class="card" style="width: 20rem;">
+                        <div class="card-header">
+                            <h5>Em @selectedCity.cidade</h5>           
+                        </div>
+                        <div class="card-body">
+                                <p class="card-text">Total de Casos: @selectedCity.total</p>
+                                <p class="card-text">Total de Mortos: @selectedCity.mortes</p>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="col-lg-6">
+            &nbsp;
+        </div>
+         <div class="col-lg-6">
+            &nbsp;
+        </div>
+        <div class="col-lg-6">
+            &nbsp;
+        </div>
+  </div>
+</div>
 }
 
 @code {
@@ -108,5 +141,6 @@
         public string cidade { get; set; }
         public string codigoIBGE { get; set; }
         public string total { get; set; }
+        public string mortes { get; set; }
     }
 }
