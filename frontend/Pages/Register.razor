@@ -2,8 +2,9 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
 
-<h3>Cadastrar-se</h3>
+<h3>Registro</h3>
 <br/>
 <br/>
 <div class="row">
@@ -21,27 +22,11 @@
             </div>
             <div class="form-group">
                 <label class="control-label">CPF:</label>
-                <InputText @bind-Value="userModel.cpf" class="form-control" />                
+                <InputText @bind-Value="userModel.cpf" @oninput="CpfMask" class="form-control" maxlength="14" />                
             </div>
             <div class="form-group">
-                <label class="control-label">Telefone:</label>
-                <InputText @bind-Value="userModel.telefone" class="form-control" />                
-            </div>
-            <div class="form-group">
-                <label class="control-label">CEP:</label>
-                 <InputText @bind-Value="userModel.cep" class="form-control"/>                
-            </div>
-            <div class="form-group">
-                <label class="control-label">Endereço:</label>
-                <InputText @bind-Value="userModel.endereco" class="form-control"/>                
-            </div>
-            <div class="form-group">
-                <label class="control-label">Número:</label>
-                <InputText @bind-Value="userModel.numero" class="form-control"/>                
-            </div>
-            <div class="form-group">
-                <label class="control-label">Bairro:</label>
-                <InputText @bind-Value="userModel.bairro" class="form-control"/>                
+                <label class="control-label">Celular:</label>
+                <InputText @bind-Value="userModel.telefone" @oninput="TelefoneMask" class="form-control" maxlength="15" />                
             </div>
             @if (states.Length > 0 )
             {
@@ -69,19 +54,38 @@
                         }
                     }
                 </InputSelect>
-            </div>            
-            
-            <button class="btn btn-outline-primary btn-sm" type="submit">Registrar</button>
-            <button type="button" class="btn btn-outline-primary btn-sm" @onclick="Voltar">Voltar</button>
+            </div>    
+            <div class="form-group">
+                <label class="control-label">Endereço:</label>
+                <InputText @bind-Value="userModel.endereco" class="form-control"/>                
+            </div>
+            <div class="form-group">
+                <label class="control-label">Número:</label>
+                <InputText @bind-Value="userModel.numero" class="form-control"/>                
+            </div>
+            <div class="form-group">
+                <label class="control-label">Bairro:</label>
+                <InputText @bind-Value="userModel.bairro" class="form-control"/>                
+            </div>
+            <div class="form-group">
+                <label class="control-label">CEP:</label>
+                 <InputText @bind-Value="userModel.cep" @oninput="CepMask" class="form-control" maxlength="9"/>                
+            </div>
+            <br/>
+            <button class="btn btn-outline-success btn-sm" type="submit">Registrar</button>
+            <button type="button" class="btn btn-outline-success btn-sm" @onclick="Voltar">Voltar</button>
         </EditForm>
     </div>
 </div>
 
 @code {
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
     private string[] states;
     private City[] cities;
     private UserModel userModel = new UserModel()
     {
+        cpf = "",
         dataNascimento = DateTime.Now
     };
 
@@ -108,6 +112,83 @@
         NavigationManager.NavigateTo("/");
     }
 
+    private Task CpfMask(ChangeEventArgs e)
+    {
+        if (e.Value.ToString().Length > 0)
+        {
+            var lastchar = e.Value.ToString().Last();
+            if (Regex.IsMatch(lastchar.ToString(), @"\d"))
+            {
+                userModel.cpf = e.Value.ToString();
+                if (userModel.cpf.Length == 3)
+                {
+                    userModel.cpf += ".";
+                }
+
+                if (userModel.cpf.Length == 7)
+                {
+                    userModel.cpf += ".";
+                }
+
+                if (userModel.cpf.Length == 11)
+                {
+                    userModel.cpf += "-";
+                }
+            }
+        }
+
+        return TextChanged.InvokeAsync(userModel.cpf);
+    }
+
+    private Task TelefoneMask(ChangeEventArgs e)
+    {
+        if (e.Value.ToString().Length > 0)
+        {
+            var lastchar = e.Value.ToString().Last();
+            if (Regex.IsMatch(lastchar.ToString(), @"\d"))
+            {
+                userModel.telefone = e.Value.ToString();
+                if (userModel.telefone.Length == 1)
+                {
+                    userModel.telefone = "(" + userModel.telefone;
+                }
+
+                if (userModel.telefone.Length == 3)
+                {
+                    userModel.telefone += ") ";
+                }
+
+                if (userModel.telefone.Length == 10)
+                {
+                    userModel.telefone += "-";
+                }
+
+                Console.WriteLine(userModel.telefone);
+            }
+        }
+
+        return TextChanged.InvokeAsync(userModel.telefone);
+    }
+
+    private Task CepMask(ChangeEventArgs e)
+    {
+        if (e.Value.ToString().Length > 0)
+        {
+            var lastchar = e.Value.ToString().Last();
+            if (Regex.IsMatch(lastchar.ToString(), @"\d"))
+            {
+                userModel.cep = e.Value.ToString();
+                if (userModel.cep.Length == 5)
+                {
+                    userModel.cep += "-";
+                }
+                Console.WriteLine(userModel.cep);
+            }
+        }
+
+        return TextChanged.InvokeAsync(userModel.cep);
+    }
+
     void Voltar()
     {
         NavigationManager.NavigateTo("/");
@@ -131,14 +212,17 @@
         public DateTime dataNascimento { get; set; }
         [Required(ErrorMessage =
             "CPF é Obrigatório")]
+        [RegularExpression(@"/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/", ErrorMessage = "CPF inválido")]
         [Display(Name = "CPF")]
         public string cpf { get; set; }
         [Required(ErrorMessage =
-            "Número do Telefone é Obrigatório")]
+            "Número do Celular é Obrigatório")]
+        [RegularExpression(@"\(\d{2}\)\s\d{4,5}\-\d{4}", ErrorMessage = "Celular inválido")]
         [Display(Name = "Telefone")]
         public string telefone { get; set; }
         [Required(ErrorMessage =
             "CEP é Obrigatório")]
+        [RegularExpression(@"^\d{5}-\d{3}$", ErrorMessage = "CEP inválido")]
         [Display(Name = "CEP")]
         public string cep { get; set; }
         [Required(ErrorMessage =
